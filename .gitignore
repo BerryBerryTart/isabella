@@ -1,0 +1,12 @@
+db.sqlite3
+env/
+winenv/
+__pycache__/
+node_modules
+linnode_modules
+winnode_modules
+.env
+.env.backup
+npm-debug.log
+yarn-error.log
+static/js
