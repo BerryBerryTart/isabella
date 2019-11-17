@@ -1,2 +1,2 @@
 @echo off
-winenv\Scripts\activate
+..\winenv\Scripts\activate

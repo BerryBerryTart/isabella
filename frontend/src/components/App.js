@@ -9,12 +9,11 @@ class App extends Component {
         super();
         this.state = {
            isLoaded: false,
-           needsUpdate: false,
            editNote: null,
            error: null,
            notes: [],
        };
-       this.handleUpdate = this.handleUpdate.bind(this);
+       this.handleCreate = this.handleCreate.bind(this);
        this.handleDelete = this.handleDelete.bind(this);
        this.handleNoteFocus = this.handleNoteFocus.bind(this);
        this.editUnmount = this.editUnmount.bind(this);
@@ -38,32 +37,12 @@ class App extends Component {
         });
     };
 
-    componentDidUpdate(prevProps){
-        if (this.state.needsUpdate == true){
-            fetch('/notes/', {method: 'GET'})
-            .then(res => res.json())
-            .then((result) => {
-                this.setState({
-                    isLoaded: true,
-                    notes: result
-                });},
-            (error) => {
-                this.setState({
-                    isLoaded: false,
-                    error: error
-                });
-            });
-            this.setState({
-                needsUpdate: false
-            });
-        }
-    }
-
-    handleUpdate(data) {
+    handleCreate(data) {
         fetch("/notes/", {method: 'POST', body: data})
+        .then(res => res.json())
         .then(
-            () => this.setState({
-                needsUpdate: true
+            (result) => this.setState({
+                notes: this.state.notes.concat(result)
             })
         );
     };
@@ -72,7 +51,7 @@ class App extends Component {
         fetch("/notes/" + id, {method: 'DELETE'})
         .then(
             () => this.setState({
-                needsUpdate: true
+                notes: this.deleteNoteAtIndex(id),
             })
         );
     };
@@ -99,9 +78,10 @@ class App extends Component {
 
     handleEdit(id, data){
         fetch('/notes/' + id + '/', {method: 'PUT', body: data})
+        .then(res => res.json())
         .then(
-            () => this.setState({
-                needsUpdate: true,
+            (result) => this.setState({
+                notes: this.updateNoteAtIndex(id, result),
                 editNote: null,
             })
         );
@@ -114,9 +94,10 @@ class App extends Component {
             body: payload,
             headers: {'Content-Type': 'application/json'},
         })
+        .then(res => res.json())
         .then(
-            () => this.setState({
-                needsUpdate: true,
+            (result) => this.setState({
+                notes: this.updateNoteAtIndex(id, result),
             })
         );
     }
@@ -135,7 +116,7 @@ class App extends Component {
                     />
                 </div>
                 <div className="topbar">
-                    <AddBar handleUpdate={this.handleUpdate}/>
+                    <AddBar handleCreate={this.handleCreate}/>
                 </div>
                 <hr />
                 <div className="notecontainer">
@@ -151,6 +132,24 @@ class App extends Component {
             </div>
         );
     };
+
+    updateNoteAtIndex(id, note){
+        const newArray = Array.from(this.state.notes);
+        const index = this.state.notes.findIndex(obj => obj.id === id);
+        if (index != -1){
+            newArray[index] = note;
+        }
+        return newArray;
+    }
+
+    deleteNoteAtIndex(id){
+        const newArray = Array.from(this.state.notes);
+        const index = this.state.notes.findIndex(obj => obj.id === id);
+        if (index != -1){
+            newArray.splice(index, 1);
+        }
+        return newArray;
+    }
 }
 
 export default App;

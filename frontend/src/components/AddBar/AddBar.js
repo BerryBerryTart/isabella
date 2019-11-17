@@ -9,7 +9,7 @@ class AddBar extends React.Component {
     handleSubmit (event) {
         event.preventDefault();
         const data = new FormData(event.target);
-        this.props.handleUpdate(data);
+        this.props.handleCreate(data);
     }
 
     render() {
