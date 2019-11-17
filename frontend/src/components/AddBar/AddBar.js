@@ -32,7 +32,7 @@ class AddBar extends React.Component {
                     <label>
                         Type
                     </label>
-                    <select>
+                    <select name="type">
                         <option />
                         <option name="type" value="home">Home</option>
                         <option name="type" value="work">Work</option>

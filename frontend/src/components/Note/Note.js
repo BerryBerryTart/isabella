@@ -18,13 +18,15 @@ class Note extends Component {
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <ul>
-                    <li key={this.props.note.title}><p className="noteTitle">{this.props.note.title}</p></li>
-                    <li key={this.props.note.note}><p className="noteText">{this.props.note.note}</p></li>
-                    <li key={this.props.note.type}><p className="noteType">{this.props.note.type}</p></li>
-                    <hr/>
-                    <li key={this.props.note.completed}>{String(this.props.note.completed)}</li>
-                </ul>
+                <div onClick={() => {this.props.handleNoteFocus(this.props.note.id);}}>
+                    <ul>
+                        <li key={this.props.note.title}><p className="noteTitle">{this.props.note.title}</p></li>
+                        <li key={this.props.note.note}><p className="noteText">{this.props.note.note}</p></li>
+                        <li key={this.props.note.type}><p className="noteType">{this.props.note.type}</p></li>
+                        <hr/>
+                        <li key={this.props.note.completed}>{String(this.props.note.completed)}</li>
+                    </ul>
+                </div>
             </div>
         )
     }
