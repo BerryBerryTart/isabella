@@ -18,7 +18,7 @@ class EditNote extends Component{
         }
 
         return (
-            <div className={this.props.mounted ? 'show-edit' : 'hide-edit'}>
+            <div className='show-edit'>
                 <div className="editContainer">
                     <form onSubmit={this.handleSubmit}>
                         <div className="formelement">

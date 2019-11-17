@@ -10,7 +10,6 @@ class App extends Component {
         this.state = {
            isLoaded: false,
            needsUpdate: false,
-           editFocus: false,
            editNote: null,
            error: null,
            notes: [],
@@ -20,6 +19,7 @@ class App extends Component {
        this.handleNoteFocus = this.handleNoteFocus.bind(this);
        this.editUnmount = this.editUnmount.bind(this);
        this.handleEdit = this.handleEdit.bind(this);
+       this.handleComplete = this.handleComplete.bind(this);
    };
 
     componentDidMount(){
@@ -83,7 +83,6 @@ class App extends Component {
         .then((result) => {
             this.setState({
                 editNote: result,
-                editFocus: !this.state.editFocus,
             });},
         (error) => {
             this.setState({
@@ -94,7 +93,6 @@ class App extends Component {
 
     editUnmount(){
         this.setState({
-            editFocus: !this.state.editFocus,
             editNote: null,
         });
     }
@@ -104,8 +102,21 @@ class App extends Component {
         .then(
             () => this.setState({
                 needsUpdate: true,
-                editFocus: !this.state.editFocus,
                 editNote: null,
+            })
+        );
+    }
+
+    handleComplete(id, data){
+        let payload = JSON.stringify({'completed': data});
+        fetch('/notes/complete/' + id + '/', {
+            method: 'PATCH',
+            body: payload,
+            headers: {'Content-Type': 'application/json'},
+        })
+        .then(
+            () => this.setState({
+                needsUpdate: true,
             })
         );
     }
@@ -129,7 +140,12 @@ class App extends Component {
                 <hr />
                 <div className="notecontainer">
                 {notes.map(item => (
-                    <Note note={item} handleNoteFocus={this.handleNoteFocus} handleDelete={this.handleDelete}/>
+                    <Note
+                        note={item}
+                        handleNoteFocus={this.handleNoteFocus}
+                        handleDelete={this.handleDelete}
+                        complete={this.handleComplete}
+                    />
                 ))}
                 </div>
             </div>

@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('notes/', views.NoteList.as_view()),
     path('notes/<int:pk>/', views.NoteDetail.as_view()),
-    path('notes/<int:pk>/complete/', views.NoteCompleted.as_view()),
+    path('notes/complete/<int:pk>/', views.NoteCompleted.as_view()),
     path('notes/sort-by/<str:type>/', views.NoteSortBy.as_view()),
 ]
 

@@ -41,11 +41,9 @@ ul {
 
 .note {
     position: relative;
-    background-color: white;
     padding: 20px;
     margin: 15px 20px 10px 10px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     width: 240px;
     white-space: initial;
     overflow-wrap: break-word;
@@ -53,22 +51,31 @@ ul {
     hyphens: auto;
 }
 
-.note ul {
-    margin-top: 10px;
-    margin-right: 15px;
+.noteComplete{
+    background-color: #d0cbd1;
 }
 
-.closebutton {
+.noteIncomplete {
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.noteControls {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 0px;
+    right: 0px;
     padding: 5px;
+}
+
+.completeBtn {
+    padding: 0px;
 }
 
 /* NOTES TEXT STYLES */
 
 .noteTitle {
     font-weight: bold;
+    margin-top: 20px;
 }
 
 .noteText {
@@ -77,6 +84,7 @@ ul {
 
 .noteType {
     font-style: italic;
+    text-align: right;
 }
 
 /* EDIT FOCUS STYLES */
