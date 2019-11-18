@@ -6,6 +6,7 @@ import autosize from 'autosize';
 import AddBar from './AddBar/AddBar';
 import Note from './Note/Note';
 import EditNote from './EditNote/EditNote';
+import FilterNote from './FilterNote/FilterNote';
 
 class App extends Component {
     constructor(){
@@ -15,6 +16,7 @@ class App extends Component {
            editNote: null,
            error: null,
            notes: [],
+           filterType: 'all',
        };
        this.handleCreate = this.handleCreate.bind(this);
        this.handleDelete = this.handleDelete.bind(this);
@@ -22,6 +24,7 @@ class App extends Component {
        this.editUnmount = this.editUnmount.bind(this);
        this.handleEdit = this.handleEdit.bind(this);
        this.handleComplete = this.handleComplete.bind(this);
+       this.handleFilter = this.handleFilter.bind(this);
    };
 
     componentDidMount(){
@@ -106,9 +109,24 @@ class App extends Component {
         );
     }
 
-    render() {
-        const {notes} = this.state;
+    handleFilter(value){
+        this.setState({
+            filterType: value,
+        })
+    }
 
+    handleImagesLoaded(imagesLoadedInstance) {
+        this.show();
+    }
+
+    render() {
+        let notes = [];
+        if (this.state.filterType != 'all'){
+            notes = this.state.notes.filter(item => item.type == this.state.filterType)
+        }
+        else {
+            notes = this.state.notes;
+        }
         return (
             <div>
                 <div>
@@ -124,7 +142,7 @@ class App extends Component {
                 </div>
                 <hr />
                 <div className="notecontainer">
-                <Masonry>
+                <Masonry onImagesLoaded={() => this.forceUpdate()}>
                 {notes.map(item => (
                     <Note
                         key={item.id}
@@ -135,6 +153,7 @@ class App extends Component {
                     />
                 ))}
                 </Masonry>
+                <FilterNote handleFilter={this.handleFilter}/>
                 </div>
             </div>
         );

@@ -1,5 +1,6 @@
 body {
     background-color: #fbf7ff;
+    height: 100vh;
 }
 
 ul {
@@ -161,4 +162,11 @@ ul {
 .edit-btn {
     color: white;
     background-color: #35026f;
+}
+
+/* FILTER CONTROLS STYLES */
+.filterBox {
+    position: absolute;
+    top: 5px;
+    left: 5px;
 }
