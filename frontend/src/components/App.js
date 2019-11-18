@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import Masonry from 'react-masonry-component';
+import autosize from 'autosize';
+
 import AddBar from './AddBar/AddBar';
 import Note from './Note/Note';
 import EditNote from './EditNote/EditNote';
@@ -35,6 +38,7 @@ class App extends Component {
                 error: error
             });
         });
+        autosize(document.querySelector('textarea'));
     };
 
     handleCreate(data) {
@@ -48,7 +52,7 @@ class App extends Component {
     };
 
     handleDelete(id){
-        fetch("/notes/" + id, {method: 'DELETE'})
+        fetch("/notes/" + id + '/', {method: 'DELETE'})
         .then(
             () => this.setState({
                 notes: this.deleteNoteAtIndex(id),
@@ -120,14 +124,17 @@ class App extends Component {
                 </div>
                 <hr />
                 <div className="notecontainer">
+                <Masonry>
                 {notes.map(item => (
                     <Note
+                        key={item.id}
                         note={item}
                         handleNoteFocus={this.handleNoteFocus}
                         handleDelete={this.handleDelete}
                         complete={this.handleComplete}
                     />
                 ))}
+                </Masonry>
                 </div>
             </div>
         );
