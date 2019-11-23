@@ -27,10 +27,6 @@ class AddBar extends React.Component {
         this.setState({[e.target.name]: e.target.value})
     }
 
-    componentDidMount() {
-
-    }
-
     render() {
         return(
             <div className="topBarForm">
@@ -51,7 +47,7 @@ class AddBar extends React.Component {
                         name="note"
                         placeholder="Note Text"
                         maxLength="400"
-                        rows="3"
+                        rows="5"
                         onChange={this.handleChange}
                         value={this.state.note}
                         required

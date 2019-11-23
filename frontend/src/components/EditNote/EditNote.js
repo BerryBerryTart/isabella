@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import autosize from 'autosize';
 
 class EditNote extends Component{
     constructor(){

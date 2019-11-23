@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Masonry from 'react-masonry-component';
-import autosize from 'autosize';
 
 import AddBar from './AddBar/AddBar';
 import Note from './Note/Note';
 import EditNote from './EditNote/EditNote';
 import FilterNote from './FilterNote/FilterNote';
+import Error from './Error/Error';
 
 class App extends Component {
     constructor(){
@@ -33,15 +33,16 @@ class App extends Component {
         .then((result) => {
             this.setState({
                 isLoaded: true,
-                notes: result
-            });},
-        (error) => {
+                notes: result,
+                error: null,
+            });}
+        )
+        .catch((error) => {
             this.setState({
                 isLoaded: false,
-                error: error
+                error: 'ERROR: Failed to fetch.',
             });
         });
-        autosize(document.querySelector('textarea'));
     };
 
     handleCreate(data) {
@@ -51,7 +52,11 @@ class App extends Component {
             (result) => this.setState({
                 notes: this.state.notes.concat(result)
             })
-        );
+        ).catch((error) => {
+            this.setState({
+                error: 'ERROR: Failed to add note.'
+            })
+        });
     };
 
     handleDelete(id){
@@ -60,21 +65,21 @@ class App extends Component {
             () => this.setState({
                 notes: this.deleteNoteAtIndex(id),
             })
-        );
+        ).catch((error) => {
+            this.setState({
+                error: 'ERROR: Failed to delete note.'
+            })
+        });
     };
 
     handleNoteFocus(id){
-        fetch('/notes/' + id + '/', {method: 'GET'})
-        .then(res => res.json())
-        .then((result) => {
+        const index = this.state.notes.findIndex(obj => obj.id === id);
+        if (index != -1){
             this.setState({
-                editNote: result,
-            });},
-        (error) => {
-            this.setState({
-                error: error
+                editNote : this.state.notes[index],
             });
-        });
+        }
+
     }
 
     editUnmount(){
@@ -91,7 +96,11 @@ class App extends Component {
                 notes: this.updateNoteAtIndex(id, result),
                 editNote: null,
             })
-        );
+        ).catch((error) => {
+            this.setState({
+                error: 'ERROR: Failed to edit note.'
+            })
+        });
     }
 
     handleComplete(id, data){
@@ -106,7 +115,11 @@ class App extends Component {
             (result) => this.setState({
                 notes: this.updateNoteAtIndex(id, result),
             })
-        );
+        ).catch((error) => {
+            this.setState({
+                error: 'ERROR: Failed to mark note as complete.'
+            })
+        });
     }
 
     handleFilter(value){
@@ -120,6 +133,19 @@ class App extends Component {
     }
 
     render() {
+        let errorComponent;
+
+        //If broke, ONLY display error
+        if (!this.state.isLoaded && this.state.error) {
+            this.refetchNotes();
+            return <Error message={this.state.error} refresh={true}/>;
+        }
+        else if (this.state.isLoaded && this.state.error){
+            this.resetError();
+            errorComponent = <Error message={this.state.error}/>
+        }
+
+        //Filter all the things
         let notes = [];
         if (this.state.filterType != 'all'){
             notes = this.state.notes.filter(item => item.type == this.state.filterType)
@@ -127,8 +153,10 @@ class App extends Component {
         else {
             notes = this.state.notes;
         }
+
         return (
             <div>
+                {errorComponent}
                 <div>
                     <EditNote
                         unmount={this.editUnmount}
@@ -159,7 +187,7 @@ class App extends Component {
         );
     };
 
-    updateNoteAtIndex(id, note){
+    updateNoteAtIndex(id, note) {
         const newArray = Array.from(this.state.notes);
         const index = this.state.notes.findIndex(obj => obj.id === id);
         if (index != -1){
@@ -168,7 +196,7 @@ class App extends Component {
         return newArray;
     }
 
-    deleteNoteAtIndex(id){
+    deleteNoteAtIndex(id) {
         const newArray = Array.from(this.state.notes);
         const index = this.state.notes.findIndex(obj => obj.id === id);
         if (index != -1){
@@ -176,6 +204,35 @@ class App extends Component {
         }
         return newArray;
     }
+
+    refetchNotes() {
+        const timer = setTimeout( () =>{
+            fetch('/notes/', {method: 'GET'})
+            .then(res => res.json())
+            .then((result) => {
+                this.setState({
+                    isLoaded: true,
+                    notes: result,
+                    error: null,
+                });}
+            )
+            .catch((error) => {
+                this.setState({
+                    isLoaded: false,
+                    error: 'ERROR: Failed to fetch.',
+                });
+            });
+        }, 30000);
+    }
+
+    resetError(){
+        const timer = setTimeout( () =>{
+            this.setState({
+                error: null
+            })
+        }, 3000);
+    }
+
 }
 
 export default App;

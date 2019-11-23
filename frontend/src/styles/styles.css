@@ -10,10 +10,10 @@ ul {
 }
 
 /* FORM STYLES */
-
 .topBarForm {
     margin-top: 20px;
-    width: 450px;;
+    width: 450px;
+    ;
 }
 
 .topbar {
@@ -28,7 +28,7 @@ ul {
     width: 100%;
 }
 
-.formelement input[type=text]{
+.formelement input[type=text] {
     width: 100%;
 }
 
@@ -37,7 +37,7 @@ ul {
     resize: none;
 }
 
-.formelement input[type=submit]{
+.formelement input[type=submit] {
     width: 100%;
     border: 0;
     box-shadow: none;
@@ -49,7 +49,6 @@ ul {
 }
 
 /* NOTES CARD STYLES */
-
 .note {
     position: relative;
     padding: 20px;
@@ -62,7 +61,7 @@ ul {
     hyphens: auto;
 }
 
-.noteComplete{
+.noteComplete {
     background-color: #d0cbd1;
     color: #6d6a71;
 }
@@ -84,7 +83,6 @@ ul {
 }
 
 /* NOTES TEXT STYLES */
-
 .noteTitle {
     font-weight: bold;
     margin-top: 20px;
@@ -100,11 +98,10 @@ ul {
 }
 
 /* EDIT FOCUS STYLES */
-
-.show-edit{
+.show-edit {
     position: fixed;
     z-index: 1;
-    background-color:rgba(13, 0, 25, 0.6);
+    background-color: rgba(13, 0, 25, 0.6);
     width: 100%;
     height: 100%;
     top: 0;
@@ -121,7 +118,7 @@ ul {
     position: relative;
 }
 
-.editNoteControls{
+.editNoteControls {
     position: absolute;
     top: 0px;
     right: 0px;
@@ -169,4 +166,10 @@ ul {
     position: absolute;
     top: 5px;
     left: 5px;
+}
+
+/* ERROR MESSAGE CARD */
+.errorMessage {
+    position: relative;
+    z-index: 99;
 }
