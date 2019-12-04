@@ -1,15 +1,16 @@
-#Isabella
+# Isabella
 
 Created with Django and React.js
 
-###Requirements
+### Requirements
 - Python3
 - Pip3
 - Node.js
 
 ### Installation
 ```sh
-python3 -m venv env # On Windows use `env\Scripts\activate`
+python3 -m venv env
+env/bin/activate # On Windows use `env\Scripts\activate`
 git clone {this project}
 cd app
 pip install -r requirements.txt
