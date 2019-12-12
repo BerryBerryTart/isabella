@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import TextField from '@material-ui/core/TextField';
 
 class EditNote extends Component{
     constructor(){
@@ -31,13 +32,15 @@ class EditNote extends Component{
                 <div className="editContainer">
                     <form className="editForm" onSubmit={this.handleSubmit}>
                         <div className="formelement">
-                            <input
-                                placeholder="Title"
-                                name="title"
-                                type="text"
+                            <TextField
+                                name={'title'}
+                                type={'text'}
+                                placeholder={'Title'}
                                 defaultValue={this.props.note.title}
-                                required
+                                required={true}
+                                label={'Note'}
                             />
+
                         </div >
                         <div className="formelement">
                             <textarea

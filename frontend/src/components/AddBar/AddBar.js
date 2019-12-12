@@ -1,4 +1,8 @@
 import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 class AddBar extends React.Component {
     constructor(props){
@@ -32,18 +36,18 @@ class AddBar extends React.Component {
             <div className="topBarForm">
             <form onSubmit={this.handleSubmit}>
                 <div className="formelement">
-                    <input
-                        name="title"
-                        type="text"
-                        placeholder="Title"
-                        maxLength="100"
+                    <TextField
+                        name={'title'}
+                        type={'text'}
+                        placeholder={'Title'}
                         onChange={this.handleChange}
                         value={this.state.title}
-                        required
+                        required={true}
+                        label={'Note'}
                     />
                 </div >
                 <div className="formelement">
-                    <textarea
+                    <TextareaAutosize
                         name="note"
                         placeholder="Note Text"
                         maxLength="400"
@@ -54,15 +58,15 @@ class AddBar extends React.Component {
                     />
                 </div>
                 <div className="formelement">
-                    <select
+                    <Select
                         name="type"
                         onChange={this.handleChange}
                         value={this.state.type}
                     >
-                        <option name="type" value="home">Home</option>
-                        <option name="type" value="work">Work</option>
-                        <option name="type" value="other">Other</option>
-                    </select>
+                        <MenuItem name="type" value="home">Home</MenuItem>
+                        <MenuItem name="type" value="work">Work</MenuItem>
+                        <MenuItem name="type" value="other">Other</MenuItem>
+                    </Select>
                 </div>
                 <div className="formelement">
                     <input type="submit" value="Submit"/>

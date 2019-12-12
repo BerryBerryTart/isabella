@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development ./frontend/src/index.js --output ./frontend/static/frontend/main.js",
+    "dev": "webpack --mode development --watch ./frontend/src/index.js --output ./frontend/static/frontend/main.js",
     "build": "webpack --mode production ./frontend/src/index.js --output ./frontend/static/frontend/main.js"
   },
   "keywords": [],
@@ -25,6 +25,7 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
+    "@material-ui/core": "^4.7.2",
     "autosize": "^4.0.2",
     "react-masonry-component": "^6.2.1",
     "react-redux": "^7.1.1",

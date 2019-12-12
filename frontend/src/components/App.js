@@ -45,6 +45,13 @@ class App extends Component {
         });
     };
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if (!this.arraysMatch(this.state.notes, nextState.notes)){
+            return true;
+        }
+        return false;
+    }
+
     handleCreate(data) {
         fetch("/notes/", {method: 'POST', body: data})
         .then(res => res.json())
@@ -78,14 +85,17 @@ class App extends Component {
             this.setState({
                 editNote : this.state.notes[index],
             });
+            let body = document.getElementsByTagName('body')[0];
+            body.setAttribute('id', 'hide-body-overflow');
         }
-
     }
 
     editUnmount(){
         this.setState({
             editNote: null,
         });
+        let body = document.getElementsByTagName('body')[0];
+        body.removeAttribute('id');
     }
 
     handleEdit(id, data){
@@ -101,6 +111,8 @@ class App extends Component {
                 error: 'ERROR: Failed to edit note.'
             })
         });
+        let body = document.getElementsByTagName('body')[0];
+        body.removeAttribute('id');
     }
 
     handleComplete(id, data){
@@ -231,6 +243,19 @@ class App extends Component {
                 error: null
             })
         }, 3000);
+    }
+
+    arraysMatch(arr1, arr2) {
+    	// Check if the arrays are the same length
+    	if (arr1.length !== arr2.length) return false;
+
+    	// Check if all items exist and are in the same order
+    	for (let i = 0; i < arr1.length; i++) {
+    		if (arr1[i] !== arr2[i]) return false;
+    	}
+
+    	// Otherwise, return true
+    	return true;
     }
 
 }

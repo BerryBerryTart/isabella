@@ -28,7 +28,7 @@ ul {
     width: 100%;
 }
 
-.formelement input[type=text] {
+.formelement input[type=text], .MuiTextField-root {
     width: 100%;
 }
 
@@ -111,11 +111,11 @@ ul {
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(2px);
-    overflow: hidden;
 }
 
 .masterNoteContainer {
     position: relative;
+    width: 500px;
 }
 
 .editNoteControls {
@@ -135,7 +135,6 @@ ul {
 
 .editContainer {
     z-index: 2;
-    width: 500px;
     background-color: white;
     position: relative;
     border-radius: 10px;
@@ -161,11 +160,21 @@ ul {
     background-color: #35026f;
 }
 
+#hide-body-overflow{
+    overflow: hidden;
+}
+
+@media screen and (max-width: 400px){
+    .masterNoteContainer, .editForm {
+        width: 100vw;
+    }
+}
+
 /* FILTER CONTROLS STYLES */
 .filterBox {
-    position: absolute;
-    top: 5px;
-    left: 5px;
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
 }
 
 /* ERROR MESSAGE CARD */
