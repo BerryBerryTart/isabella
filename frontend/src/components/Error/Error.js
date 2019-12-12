@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Error({message, refresh=false}){
+function Error({message, refresh=false, close}){
     let refreshMessage;
     if(refresh){
         refreshMessage=
@@ -12,6 +12,9 @@ function Error({message, refresh=false}){
         <div className="errorMessage">
             <div className="alert alert-danger" role="alert">
                 {message}
+                <button onClick={close} type="button" className="btn btn-default errorBtn" aria-label="Close">
+                    <span className="oi oi-x" aria-hidden="true"></span>
+                </button>
             </div>
             {refreshMessage}
         </div>

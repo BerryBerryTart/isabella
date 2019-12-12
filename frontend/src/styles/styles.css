@@ -182,3 +182,7 @@ ul {
     position: relative;
     z-index: 99;
 }
+
+.errorBtn {
+    float: right;
+}

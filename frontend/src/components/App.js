@@ -13,6 +13,7 @@ class App extends Component {
         super();
         this.state = {
            isLoaded: false,
+           demoMode: true,
            editNote: null,
            error: null,
            notes: [],
@@ -25,6 +26,7 @@ class App extends Component {
        this.handleEdit = this.handleEdit.bind(this);
        this.handleComplete = this.handleComplete.bind(this);
        this.handleFilter = this.handleFilter.bind(this);
+       this.closeError = this.closeError.bind(this);
    };
 
     componentDidMount(){
@@ -35,6 +37,7 @@ class App extends Component {
                 isLoaded: true,
                 notes: result,
                 error: null,
+                demoMode:  window.session.login ? false : true,
             });}
         )
         .catch((error) => {
@@ -53,30 +56,48 @@ class App extends Component {
     }
 
     handleCreate(data) {
-        fetch("/notes/", {method: 'POST', body: data})
-        .then(res => res.json())
-        .then(
-            (result) => this.setState({
-                notes: this.state.notes.concat(result)
-            })
-        ).catch((error) => {
+        if (!this.state.demoMode){
+            let csrfToken = this.getCookie('csrftoken');
+            fetch("/new-note/", {method: 'POST', body: data, headers:{'X-CSRFToken': csrfToken}})
+            .then(this.handleErrors)
+            .then(res => res.json())
+            .then(
+                (result) => this.setState({
+                    notes: this.state.notes.concat(result)
+                })
+            ).catch((error) => {
             this.setState({
                 error: 'ERROR: Failed to add note.'
             })
         });
+        }
+        else {
+            this.setState({
+                notes: this.state.notes.concat(this.DEMOcreateNote(data)),
+            })
+        }
     };
 
     handleDelete(id){
-        fetch("/notes/" + id + '/', {method: 'DELETE'})
-        .then(
-            () => this.setState({
-                notes: this.deleteNoteAtIndex(id),
-            })
-        ).catch((error) => {
+        if (!this.state.demoMode){
+            let csrfToken = this.getCookie('csrftoken');
+            fetch("/notes/" + id + '/', {method: 'DELETE', headers:{'X-CSRFToken': csrfToken}})
+            .then(this.handleErrors)
+            .then(
+                () => this.setState({
+                    notes: this.deleteNoteAtIndex(id),
+                })
+            ).catch((error) => {
             this.setState({
                 error: 'ERROR: Failed to delete note.'
             })
         });
+        }
+        else {
+            this.setState({
+                notes: this.deleteNoteAtIndex(id),
+            })
+        }
     };
 
     handleNoteFocus(id){
@@ -99,39 +120,60 @@ class App extends Component {
     }
 
     handleEdit(id, data){
-        fetch('/notes/' + id + '/', {method: 'PUT', body: data})
-        .then(res => res.json())
-        .then(
-            (result) => this.setState({
-                notes: this.updateNoteAtIndex(id, result),
-                editNote: null,
-            })
-        ).catch((error) => {
+        if (!this.state.demoMode){
+            let csrfToken = this.getCookie('csrftoken');
+            fetch('/notes/' + id + '/', {method: 'PUT', body: data, headers:{'X-CSRFToken': csrfToken}})
+            .then(this.handleErrors)
+            .then(res => res.json())
+            .then(
+                (result) => this.setState({
+                    notes: this.updateNoteAtIndex(id, result),
+                    editNote: null,
+                })
+            ).catch((error) => {
+                this.setState({
+                    error: 'ERROR: Failed to edit note.'
+                })
+            });
+            let body = document.getElementsByTagName('body')[0];
+            body.removeAttribute('id');
+        }
+        else {
             this.setState({
-                error: 'ERROR: Failed to edit note.'
+                editNote: null,
+                notes: this.DEMOupdateNoteAtIndex(id, data),
             })
-        });
-        let body = document.getElementsByTagName('body')[0];
-        body.removeAttribute('id');
+            let body = document.getElementsByTagName('body')[0];
+            body.removeAttribute('id');
+        }
     }
 
     handleComplete(id, data){
-        let payload = JSON.stringify({'completed': data});
-        fetch('/notes/complete/' + id + '/', {
-            method: 'PATCH',
-            body: payload,
-            headers: {'Content-Type': 'application/json'},
-        })
-        .then(res => res.json())
-        .then(
-            (result) => this.setState({
-                notes: this.updateNoteAtIndex(id, result),
+        if (!this.state.demoMode){
+            let payload = JSON.stringify({'completed': data});
+            let csrfToken = this.getCookie('csrftoken')
+            fetch('/notes/complete/' + id + '/', {
+                method: 'PATCH',
+                body: payload,
+                headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
             })
-        ).catch((error) => {
+            .then(this.handleErrors)
+            .then(res => res.json())
+            .then(
+                (result) => this.setState({
+                    notes: this.updateNoteAtIndex(id, result),
+                })
+            ).catch((error) => {
+                this.setState({
+                    error: 'ERROR: Failed to mark note as complete.'
+                })
+            });
+        }
+        else{
             this.setState({
-                error: 'ERROR: Failed to mark note as complete.'
+                notes: this.DEMOcompleteNoteAtIndex(id, data),
             })
-        });
+        }
     }
 
     handleFilter(value){
@@ -153,8 +195,7 @@ class App extends Component {
             return <Error message={this.state.error} refresh={true}/>;
         }
         else if (this.state.isLoaded && this.state.error){
-            this.resetError();
-            errorComponent = <Error message={this.state.error}/>
+            errorComponent = <Error message={this.state.error} close={this.closeError}/>
         }
 
         //Filter all the things
@@ -208,6 +249,45 @@ class App extends Component {
         return newArray;
     }
 
+    DEMOupdateNoteAtIndex(id, data){
+        const newArray = Array.from(this.state.notes);
+        const index = this.state.notes.findIndex(obj => obj.id === id);
+        if (index != -1){
+            newArray[index].note = data.get('note');
+            newArray[index].title = data.get('title');
+            newArray[index].type = data.get('type');
+        }
+        return newArray;
+    }
+
+    DEMOcompleteNoteAtIndex(id, data){
+        const newArray = Array.from(this.state.notes);
+        const index = this.state.notes.findIndex(obj => obj.id === id);
+        let databool = (data === 'true');
+        if (index != -1){
+            newArray[index].completed = databool;
+        }
+        return newArray;
+    }
+
+    DEMOcreateNote(data){
+        let note = {
+            completed: false,
+            id: this.createUUID,
+            note: data.get('note'),
+            title: data.get('title'),
+            type: data.get('type'),
+        }
+        return note;
+    }
+
+    createUUID() {
+       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+       });
+    }
+
     deleteNoteAtIndex(id) {
         const newArray = Array.from(this.state.notes);
         const index = this.state.notes.findIndex(obj => obj.id === id);
@@ -237,12 +317,10 @@ class App extends Component {
         }, 30000);
     }
 
-    resetError(){
-        const timer = setTimeout( () =>{
-            this.setState({
-                error: null
-            })
-        }, 3000);
+    closeError() {
+        this.setState({
+            error: null,
+        })
     }
 
     arraysMatch(arr1, arr2) {
@@ -256,6 +334,29 @@ class App extends Component {
 
     	// Otherwise, return true
     	return true;
+    }
+
+    handleErrors(res){
+        if (!res.ok){
+            throw Error(res.statusText);
+        }
+        return res;
+    }
+
+    getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
     }
 
 }
