@@ -2,6 +2,8 @@
 
 Created with Django and React.js
 
+[Live Demo](https://berryt.art/)
+
 ### Requirements
 - Python3
 - Pip3
