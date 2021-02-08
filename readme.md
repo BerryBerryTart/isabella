@@ -2,7 +2,8 @@
 
 Created with Django and React.js
 
-[Live Demo](https://berryt.art/)
+## Why The Name Isabella?
+It's a play on words! Isabelle is a secratary in the popular video game 'Animal Crossing.' And thus, this minimal app is meant to help organise and keep track of things!
 
 ### Requirements
 - Python3
@@ -11,13 +12,22 @@ Created with Django and React.js
 
 ### Installation
 ```sh
-python3 -m venv env
+python -m venv env
 env/bin/activate # On Windows use `env\Scripts\activate`
 git clone {this project}
-cd app
+cd isabella
 pip install -r requirements.txt
 npm install
 npm run dev
-python3 manage.py migrate
-python3 manage.py runserver
+python manage.py migrate
+python manage.py runserver
 ```
+
+### Preview
+![Basic Layout](/demo/demo1.png)
+<br>
+<em>Basic Layout</em>
+
+![Editing A Card](/demo/demo2.png)
+<br>
+<em>Editing A Card</em>

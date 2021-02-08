@@ -9,4 +9,4 @@ winnode_modules
 .env.backup
 npm-debug.log
 yarn-error.log
-static/js
+frontend/static/frontend/main.js

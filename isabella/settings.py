@@ -27,7 +27,7 @@ except:
     SECRET_KEY='le66a6s#u*eys(gyz9(0u-4(--8ug!cco84f*np40b!_v&y8)+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'notes',
-    'frontend',
+    'frontend'
 ]
 
 MIDDLEWARE = [
@@ -61,7 +61,6 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:8000',
-    'http://localhost:8080',
 ]
 
 ROOT_URLCONF = 'isabella.urls'
@@ -134,5 +133,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, "static"),
 )
