@@ -24,10 +24,10 @@ python manage.py runserver
 ```
 
 ### Preview
-![Basic Layout](/demo/demo1.png)
+![Basic Layout](demo/demo1.png)
 <br>
 <em>Basic Layout</em>
 
-![Editing A Card](/demo/demo2.png)
+![Editing A Card](demo/demo2.png)
 <br>
 <em>Editing A Card</em>
