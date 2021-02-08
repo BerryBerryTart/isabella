@@ -5,6 +5,12 @@ Created with Django and React.js
 ## Why The Name Isabella?
 It's a play on words! Isabelle is a secratary in the popular video game 'Animal Crossing.' And thus, this minimal app is meant to help organise and keep track of things!
 
+### Features
+- Reactive layout
+- Ability to mark notes complete
+- CRUD functionality
+- Sort notes by classification
+
 ### Requirements
 - Python3
 - Pip3
